@@ -50,6 +50,12 @@ func NewTree(n *Node) *Tree {
 }
 
 
+/**
+ 这个 Insert  的过程是这样的
+ 首先 假如 树为空的话， 就把节点n设置为顶点
+ 然后假如继续加入其他点的话， 那么就判断跟顶点的大小，然后按照 左节点小右节点大的原则一直往下加下去，形成一颗树， 所以此函数可以递归处理, 无论加入的点是左节点还是右节点，函数里面自会判断
+**/
+
 func (t *Tree) Insert(i int) {
 	n := &Node{ Value: i }			//定义一个 Node类型的 n 变量, 把参数 i 赋予这个节点(node)的 value 属性
 	if t.Head == nil {			//如果这个树没有顶点的话，那么就定义 n 为这个树的顶点
@@ -70,12 +76,12 @@ func (t *Tree) Insert(i int) {
 				h = h.Left
 			}
 		} else {											//如果 n节点的值大于 h节点的值
-			id h.Right == nil {					//如果 h节点没有右节点
+			if h.Right == nil {					//如果 h节点没有右节点
 				h.Right = n								//那么就定义 h的右节点为 n节点
-				n.Parent = n							//定义 n节点的父节点就是自己 ？？？
+				n.Parent = h							//定义 n节点的父节点就是 h节点
 				break
 		  } else {
-				h = h.Right
+				h = h.Right							//如果 h已经有了右节点，那么就继续寻找下去， 移动到 h的右节点继续寻找合适的位置 insert 进去， 所以这里把 h.Right 的 点的指针赋予 h，以便整个函数能递归
 			}
 		}
 	}
@@ -131,46 +137,62 @@ func (t *Tree) Delete(i int) bool {
 				h.Value = h.Left.Value
 				h.Left = h.Left.Left
 				h.Right = h.Left.Right
+			
+				/**
+				* 如果是左右节点都有的情况下,就用子左节点去代替父节点， 然后以子右节点为顶点，重新再建一颗新的树， 就是subTree
+				**/
 				
 				right := h.Right			//先把 h节点的右节点赋予变量 right
-				if right != nil {
-					subTree := &Tree{Head: h}
+				if right != nil {			//如果 h节点的右节点也不为空，这种情况是 h节点的左右两个节点都是不为空的情况
+					subTree := &Tree{Head: h}				//以右节点为顶点建一颗子树 ???
+					IterOnTree(right, func(n *Node) {			//查看 IterOnTree 函数的逻辑
+							subTree.Insert(n.Value)
+					})
 				}
-				
+				t.Size--
+				return true
 			}
+			
+			if h.Right != nil {				//如果 h节点的右节点不为空，排除了上面左节点不为空的情况了，因为上面已经返回了, 这种情况就是这个 h节点只有右节点的情况， 比较好处理
+				h.Value =  h.Right.Value
+				h.Left = h.Right.Left
+				h.Right = h.Right.Right
+				
+				t.Size--
+				return true
+			}
+			
+			if parent == nil {			//一开始就定义了 parent， 直到找到要寻找的节点， parent就是 h节点，也就是寻找路线上的上一个节点, 这种情况就是树为空 或者 树只有一个节点, 而且这个节点就是要寻找的节点， 那么去就掉这个唯一的节点， 则树为空
+				t.Head = nil
+				t.Size--
+				return true
+			}
+			
+			if parent.Left == n {			//下面这种情况都是树原来有三个节点的情况，左右子节点哪个是要寻找的节点，分别删除哪个
+				parent.Left = nil
+			} else {
+				parent.Right = nil
+			}
+			t.Size--
+			return true
 		}
-	}	
+	}			//END FOR
+	return false				//找不到要寻找的节点	
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+func IterOnTree(n *Node, f func(*Node)) bool {
+	if n == nil {		//？？？
+		return true
+	}
+	if !IterOnTree(n.Left, f) {
+		return false
+	}
+	
+	f(n)
+	
+	return IterOnTree(n.Right, f)
+}
 
 
 
