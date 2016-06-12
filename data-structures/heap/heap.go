@@ -103,7 +103,7 @@ func (h *Heap) Insert(n Item) {
 
 
 // extract 提取的意思
-//这个提取是把 堆的第一个节点提出去， 然后把剩下的节点重新组成堆
+//这个提取是把 堆的第一个节点提出去，并且返回第一个节点 然后把剩下的节点重新组成堆
 func (h *Heap) Extract() (el Item) {      //指定了返回 e1, 函数最后return 的时候不用 return e1， golang自己会返回
   h.Lock()
   defer h.Unlock()
