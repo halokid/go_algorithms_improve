@@ -11,18 +11,18 @@ func search(sortedArray []int, el int) int {      //在searchArray里面查找el
   init, end := 0, len(sortedArray) - 1
   
   for init <= end {
-    middle := ( (end - init) >> 1) + init
+    middle := ( (end - init) >> 1) + init    //求出中间位置的节点的逻辑是这个算法的关键
     
     if sortedArray[middle] == el {
       return middle
     }
     
     if sortedArray[middle] < el {
-      init = middle + 1
+      init = middle + 1       //假如中间节点小于 要寻找的 el， 则 init（头节点）加一之后，再用14行的规则求中间节点
     } else {
-      end = middle - 1
+      end = middle - 1        //逻辑同理
     }
-  }
+  }   // END FOR
   
   return -1
 }
