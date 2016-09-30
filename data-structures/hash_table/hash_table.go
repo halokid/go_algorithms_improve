@@ -19,6 +19,7 @@ type HashTable struct {
 	Capacity		int
 }
 
+//这个结构是哈希表的标准结构， key， value 是用户输入要储存的两个值， 而具体某个哈希元素储存在哈希表的位置，就靠  position(key)来算出来的， 而 position 就是一个哈希算法，这个位置要尽量不重复，哈希表性能才好，要是重复的话，那么多个元素就以链表的形式储存在一个 position 中
 type item struct {
 	key			string
 	value		interface{}
