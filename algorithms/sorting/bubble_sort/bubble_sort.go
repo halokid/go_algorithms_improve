@@ -18,7 +18,7 @@ import ()
 第三次   把剩下最大的（倒数第三大）移到 (最右边的位置 - 2), 内嵌循环最右边边界
 **/
 func sort(arr []int) {
-  for itemCount := len(arr) - 1; ; itemCount-- {
+  for itemCount := len(arr); ; itemCount-- {
     swap := false     //标记内嵌的循环有没有交换
     
     for i := 1; i < itemCount; i++ {
