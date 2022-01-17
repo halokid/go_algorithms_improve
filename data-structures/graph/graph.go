@@ -10,9 +10,9 @@ package graph
 
 import (
   "fmt"
-)
+)//没用
 
-type VertexId unit      //Vertex 顶点， 定义顶点的值, 定义图的各个点的内省为 unit
+type VertexId unit //uint     //Vertex 顶点， 定义顶点的值, 定义图的各个点的内省为 unit
 
 type Vertices []VertexId        //把所有的顶点都放在一个数组里面
 
